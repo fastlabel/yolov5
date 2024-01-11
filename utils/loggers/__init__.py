@@ -281,7 +281,7 @@ class Loggers:
         print(vals[0].cpu().numpy().tolist())
 
         print(
-            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()[0]}, Test Loss:{vals[7]}, Test Acc:{best_fitness};"
+            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()}, Test Loss:{vals[7]}, Test Acc:{best_fitness[0]};"
         )
         # for index, key in enumerate(self.keys):
         #     # print(type(tuple(vals)[index]))

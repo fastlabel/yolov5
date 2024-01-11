@@ -275,9 +275,13 @@ class Loggers:
     def on_fit_epoch_end(self, vals, epoch, best_fitness, fi):
         # Callback runs at the end of each fit (train+val) epoch
         x = dict(zip(self.keys, vals))
+        print(vals)
+        print(best_fitness)
+        print(vals[0].cpu().numpy())
+        print(vals[0].cpu().numpy().tolist())
 
         print(
-            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy()[0]}, Test Loss:{vals[7]}, Test Acc:{best_fitness};"
+            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()[0]}, Test Loss:{vals[7]}, Test Acc:{best_fitness};"
         )
         # for index, key in enumerate(self.keys):
         #     # print(type(tuple(vals)[index]))

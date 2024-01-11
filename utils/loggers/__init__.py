@@ -276,17 +276,20 @@ class Loggers:
         # Callback runs at the end of each fit (train+val) epoch
         x = dict(zip(self.keys, vals))
 
-        print("Epoch : ", epoch)
-        for index, key in enumerate(self.keys):
-            print(type(tuple(vals)[index]))
-            print(
-                key.replace(" ", "").replace("　", "") + ":",
-                str(tuple(vals)[index]).replace(" ", "").replace("　", ""),
-            )
-            print("val/box_loss:0.1")
-            print(key)
-            print()
-            print("Train_error=0.138318;  Valid_error=0.324557;")
+        print(
+            f"Epoch: {epoch}, Training Loss: {vals[0].numpy()[0]}, Test Loss:{vals[7]},"
+        )
+        # for index, key in enumerate(self.keys):
+        #     # print(type(tuple(vals)[index]))
+        #     print(
+        #         key.replace(" ", "").replace("　", "") + "=",
+        #         str(tuple(vals)[index]).replace(" ", "").replace("　", ""),
+        #         ";",
+        #     )
+        # print("val/box_loss:0.1")
+        # print(key)
+        # print()
+        # print("Train_error=0.138318;  Valid_error=0.324557;")
         print("###############################")
         if self.csv:
             file = self.save_dir / "results.csv"

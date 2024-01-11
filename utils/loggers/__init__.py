@@ -286,6 +286,7 @@ class Loggers:
             print("val/box_loss:0.1")
             print(key)
             print()
+            print("Train_error=0.138318;  Valid_error=0.324557;")
         print("###############################")
         if self.csv:
             file = self.save_dir / "results.csv"

@@ -277,7 +277,7 @@ class Loggers:
         x = dict(zip(self.keys, vals))
 
         print(
-            f"Epoch: {epoch}, Training Loss: {vals[0].numpy()[0]}, Test Loss:{vals[7]},"
+            f"Epoch: {epoch}, Training Loss: {vals[0].numpy()[0]}, Test Loss:{vals[7]}, Test Acc:{best_fitness};"
         )
         # for index, key in enumerate(self.keys):
         #     # print(type(tuple(vals)[index]))

@@ -278,7 +278,7 @@ class Loggers:
 
         print("Epoch : ", epoch)
         for index, key in enumerate(self.keys):
-            print(key, " : ", tuple(vals)[index])
+            print(key + ":", tuple(vals)[index])
         print("###############################")
         if self.csv:
             file = self.save_dir / "results.csv"

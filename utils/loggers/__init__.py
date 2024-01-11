@@ -278,7 +278,7 @@ class Loggers:
 
         print("Epoch : ", epoch)
         for index, key in enumerate(self.keys):
-            print(key + ":", tuple(vals)[index])
+            print(key.replace(" ", "").replace("　", "") + ":", str(tuple(vals)[index]).replace(" ", "").replace("　", ""))
         print("###############################")
         if self.csv:
             file = self.save_dir / "results.csv"
@@ -509,6 +509,9 @@ def web_project_name(project):
         if project.endswith("-cls")
         else "-Segment"
         if project.endswith("-seg")
+        else ""
+    )
+    return f"YOLOv5{suffix}"
         else ""
     )
     return f"YOLOv5{suffix}"

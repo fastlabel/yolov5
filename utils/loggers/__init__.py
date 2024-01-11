@@ -279,9 +279,11 @@ class Loggers:
         print(best_fitness)
         print(vals[0].cpu().numpy())
         print(vals[0].cpu().numpy().tolist())
+        # おそらく
+        accuracy = best_fitness[0] if type(best_fitness) == list else best_fitness
 
         print(
-            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()}, Test Loss: {vals[7]}, Test Acc: {best_fitness[0]};"
+            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()}, Test Loss: {vals[7]}, Test Acc: {accuracy};"
         )
         # for index, key in enumerate(self.keys):
         #     # print(type(tuple(vals)[index]))

@@ -278,7 +278,11 @@ class Loggers:
 
         print("Epoch : ", epoch)
         for index, key in enumerate(self.keys):
+            print(type(tuple(vals)[index]))
             print(key.replace(" ", "").replace("　", "") + ":", str(tuple(vals)[index]).replace(" ", "").replace("　", ""))
+            print("val/box_loss:0.1")
+            print(key)
+            print(vals[index])
         print("###############################")
         if self.csv:
             file = self.save_dir / "results.csv"

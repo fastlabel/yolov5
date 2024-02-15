@@ -395,8 +395,6 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                     torch.save(ckpt, best)
                 if opt.save_period > 0 and epoch % opt.save_period == 0:
                     LOGGER.info(f'Saving checkpoint at {epoch} epochs')
-                    LOGGER.info(f'opt: {pformat(opt)}')
-                    LOGGER.info(f'ckpt: {pformat(ckpt)}')
                     LOGGER.info('optの中身')
                     print_namespace(opt)
                     print_dict(ckpt)

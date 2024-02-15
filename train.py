@@ -24,7 +24,7 @@ import time
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
-
+from pprint import pformat
 import numpy as np
 import torch
 import torch.distributed as dist
@@ -385,6 +385,8 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                     torch.save(ckpt, best)
                 if opt.save_period > 0 and epoch % opt.save_period == 0:
                     LOGGER.info(f'Saving checkpoint at {epoch} epochs')
+                    LOGGER.info(pformat(opt))
+                    LOGGER.info(pformat(ckpt))
                     torch.save(ckpt, w / f'epoch{epoch}.pt')
                 del ckpt
                 callbacks.run('on_model_save', last, epoch, final_epoch, best_fitness, fi)

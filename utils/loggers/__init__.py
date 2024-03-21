@@ -227,7 +227,7 @@ class Loggers():
         x = dict(zip(self.keys, vals))
 
         print(
-            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()}, Validation Loss: {vals[7]}, Validation Precision: {vals[3]}, Validation Recall: {vals[4]}, Validation mAP_0.5: {vals[5]}, Validation metrics/mAP_0.5:0.95: {vals[6]}"
+            f"Epoch: {epoch}, Training Loss: {vals[0].cpu().numpy().tolist()}, Validation Loss: {vals[7]}, Validation mAP_0.5: {vals[5]}, Validation mAP_0.5:0.95: {vals[6]}"
         )
 
         if self.csv:

@@ -3,13 +3,14 @@
 
 # Base ----------------------------------------
 matplotlib>=3.2.2
-numpy>=1.18.5
+numpy>=2.0.0  # np.trapezoid (np.trapz removed in numpy 2)
 opencv-python>=4.1.1
-Pillow>=7.1.2
+Pillow>=9.5.0  # ImageFont.FreeTypeFont.getbbox (getsize removed in Pillow 10)
+packaging  # replaces pkg_resources, removed in setuptools 82
 PyYAML>=5.3.1
 requests>=2.23.0
 scipy>=1.4.1
-torch>=1.7.0  # see https://pytorch.org/get-started/locally/ (recommended)
+torch>=1.13.0  # torch.load(weights_only=...) ; see https://pytorch.org/get-started/locally/
 torchvision>=0.8.1
 tqdm>=4.64.0
 # protobuf<=3.20.1  # https://github.com/ultralytics/yolov5/issues/8012

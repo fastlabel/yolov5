@@ -321,7 +321,7 @@ def check_git_status(repo='ultralytics/yolov5', branch='master'):
     LOGGER.info(s)
 
 
-def check_python(minimum='3.7.0'):
+def check_python(minimum='3.9.0'):
     # Check current python version vs. required python version
     check_version(platform.python_version(), minimum, name='Python ', hard=True)
 

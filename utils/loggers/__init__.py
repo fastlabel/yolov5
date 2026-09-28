@@ -7,8 +7,8 @@ import os
 import warnings
 from pathlib import Path
 
-import pkg_resources as pkg
 import torch
+from packaging.version import parse as parse_version
 from torch.utils.tensorboard import SummaryWriter
 
 from utils.general import LOGGER, colorstr, cv2
@@ -24,7 +24,7 @@ try:
     import wandb
 
     assert hasattr(wandb, '__version__')  # verify package import not local dir
-    if pkg.parse_version(wandb.__version__) >= pkg.parse_version('0.12.2') and RANK in {0, -1}:
+    if parse_version(wandb.__version__) >= parse_version('0.12.2') and RANK in {0, -1}:
         try:
             wandb_login_success = wandb.login(timeout=30)
         except wandb.errors.UsageError:  # known non-TTY terminal issue
@@ -106,11 +106,11 @@ class Loggers():
         # W&B
         if wandb and 'wandb' in self.include:
             wandb_artifact_resume = isinstance(self.opt.resume, str) and self.opt.resume.startswith('wandb-artifact://')
-            run_id = torch.load(self.weights).get('wandb_id') if self.opt.resume and not wandb_artifact_resume else None
+            run_id = torch.load(self.weights, weights_only=False).get('wandb_id') if self.opt.resume and not wandb_artifact_resume else None
             self.opt.hyp = self.hyp  # add hyperparameters
             self.wandb = WandbLogger(self.opt, run_id)
             # temp warn. because nested artifacts not supported after 0.12.10
-            if pkg.parse_version(wandb.__version__) >= pkg.parse_version('0.12.11'):
+            if parse_version(wandb.__version__) >= parse_version('0.12.11'):
                 s = "YOLOv5 temporarily requires wandb version 0.12.10 or below. Some features may not work as expected."
                 self.logger.warning(s)
         else:

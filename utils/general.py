@@ -19,6 +19,7 @@ import time
 import urllib
 from copy import deepcopy
 from datetime import datetime
+from importlib import metadata
 from itertools import repeat
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
@@ -29,10 +30,11 @@ from zipfile import ZipFile
 import cv2
 import numpy as np
 import pandas as pd
-import pkg_resources as pkg
 import torch
 import torchvision
 import yaml
+from packaging.requirements import InvalidRequirement, Requirement
+from packaging.version import parse as parse_version
 
 from utils import TryExcept, emojis
 from utils.downloads import gsutil_getsize
@@ -319,14 +321,14 @@ def check_git_status(repo='ultralytics/yolov5', branch='master'):
     LOGGER.info(s)
 
 
-def check_python(minimum='3.7.0'):
+def check_python(minimum='3.9.0'):
     # Check current python version vs. required python version
     check_version(platform.python_version(), minimum, name='Python ', hard=True)
 
 
 def check_version(current='0.0.0', minimum='0.0.0', name='version ', pinned=False, hard=False, verbose=False):
     # Check version vs. required version
-    current, minimum = (pkg.parse_version(x) for x in (current, minimum))
+    current, minimum = (parse_version(x) for x in (current, minimum))
     result = (current == minimum) if pinned else (current >= minimum)  # bool
     s = f'WARNING ⚠️ {name}{minimum} is required by YOLOv5, but {name}{current} is currently installed'  # string
     if hard:
@@ -334,6 +336,14 @@ def check_version(current='0.0.0', minimum='0.0.0', name='version ', pinned=Fals
     if verbose and not result:
         LOGGER.warning(s)
     return result
+
+
+def parse_requirements(file):
+    # Yield Requirement objects from a requirements.txt file object, skipping blanks and comments
+    for line in file:
+        line = line.split('#')[0].strip()
+        if line:
+            yield Requirement(line)
 
 
 @TryExcept()
@@ -345,7 +355,7 @@ def check_requirements(requirements=ROOT / 'requirements.txt', exclude=(), insta
         file = requirements.resolve()
         assert file.exists(), f"{prefix} {file} not found, check failed."
         with file.open() as f:
-            requirements = [f'{x.name}{x.specifier}' for x in pkg.parse_requirements(f) if x.name not in exclude]
+            requirements = [f'{x.name}{x.specifier}' for x in parse_requirements(f) if x.name not in exclude]
     elif isinstance(requirements, str):
         requirements = [requirements]
 
@@ -353,8 +363,10 @@ def check_requirements(requirements=ROOT / 'requirements.txt', exclude=(), insta
     n = 0
     for r in requirements:
         try:
-            pkg.require(r)
-        except (pkg.VersionConflict, pkg.DistributionNotFound):  # exception if requirements not met
+            req = Requirement(r)
+            if not req.specifier.contains(metadata.version(req.name), prereleases=True):
+                raise metadata.PackageNotFoundError(req.name)
+        except (metadata.PackageNotFoundError, InvalidRequirement):  # exception if requirements not met
             s += f'"{r}" '
             n += 1
 
@@ -943,7 +955,7 @@ def non_max_suppression(
 
 def strip_optimizer(f='best.pt', s=''):  # from utils.general import *; strip_optimizer()
     # Strip optimizer from 'f' to finalize training, optionally save as 's'
-    x = torch.load(f, map_location=torch.device('cpu'))
+    x = torch.load(f, map_location=torch.device('cpu'), weights_only=False)
     if x.get('ema'):
         x['model'] = x['ema']  # replace model with ema
     for k in 'optimizer', 'best_fitness', 'wandb_id', 'ema', 'updates':  # keys
